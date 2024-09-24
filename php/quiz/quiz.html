@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin: 20px 0;
+        }
+        .result {
+            font-weight: bold;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Simple Quiz</h1>
+    <div id="quiz-container"></div>
+    <button id="submit">Submit</button>
+    <div id="result" class="result"></div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Lisbon"],
+                answer: "Paris"
+            },
+            {
+                question: "Which planet is known as the Red Planet?",
+                options: ["Earth", "Mars", "Jupiter", "Saturn"],
+                answer: "Mars"
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                answer: "4"
+            },
+        ];
+
+        let score = 0;
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz-container');
+            quizData.forEach((item, index) => {
+                const questionElement = document.createElement('div');
+                questionElement.classList.add('question');
+                questionElement.innerHTML = `
+                    <h3>${index + 1}. ${item.question}</h3>
+                    ${item.options.map(option => `
+                        <label>
+                            <input type="radio" name="question${index}" value="${option}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                `;
+                quizContainer.appendChild(questionElement);
+            });
+        }
+
+        function calculateScore() {
+            quizData.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selectedOption && selectedOption.value === item.answer) {
+                    score++;
+                }
+            });
+        }
+
+        document.getElementById('submit').addEventListener('click', () => {
+            calculateScore();
+            document.getElementById('result').innerText = `Your score is ${score} out of ${quizData.length}`;
+            score = 0; // Reset score for next attempt
+        });
+
+        loadQuiz();
+    </script>
+
+</body>
+</html>
